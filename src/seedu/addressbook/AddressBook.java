@@ -608,13 +608,19 @@ public class AddressBook {
         }
     }
     /**
-     * Compare the names based on alphabetical order and switch if needed
+     * Swap position of person in address book if needed after comparison
      */
     private static void swapPersonListPosition(ArrayList<String[]> list, int comparisonValue, Collator myCollator, int j, String[] person, String[] person2) {
-        if(myCollator.compare(person2[START_INDEX],person[START_INDEX])< comparisonValue) {
+        if(comparePersonName(comparisonValue, myCollator, person, person2)) {
             list.set(j,person2);
             list.set(j+1,person);
         }
+    }
+    /**
+     * Compare names based of alphabetical order
+     */
+    private static boolean comparePersonName(int comparisonValue, Collator myCollator, String[] person, String[] person2) {
+        return myCollator.compare(person2[START_INDEX],person[START_INDEX])< comparisonValue;
     }
 
     /**
