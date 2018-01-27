@@ -603,13 +603,20 @@ public class AddressBook {
             for(int j=START_INDEX; j<list.size()-i-1; j++) {
                 String[] person = list.get(j);
                 String[] person2 = list.get(j+1);
-                if(myCollator.compare(person2[START_INDEX],person[START_INDEX])< comparisonValue) {
-                    list.set(j,person2);
-                    list.set(j+1,person);
-                }
+                swapPosition(list, comparisonValue, myCollator, j, person, person2);
             }
         }
     }
+    /**
+     * Compare the names based on alphabetical order and switch if needed
+     */
+    private static void swapPosition(ArrayList<String[]> list, int comparisonValue, Collator myCollator, int j, String[] person, String[] person2) {
+        if(myCollator.compare(person2[START_INDEX],person[START_INDEX])< comparisonValue) {
+            list.set(j,person2);
+            list.set(j+1,person);
+        }
+    }
+
     /**
      * Requests to terminate the program.
      */
