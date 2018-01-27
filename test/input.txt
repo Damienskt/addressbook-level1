@@ -4,6 +4,7 @@
 
   # should recognise invalid command
   sfdfd
+  sfsd
 
 ##########################################################
 # clean and check state
@@ -98,6 +99,18 @@
   # clears all
   clear
   list
+
+##########################################################
+# test sortAlpha command
+##########################################################
+
+  # Sorts address book in alphabetical order
+   add Charlie Dickson e/charlie.d@nus.edu.sg p/333333
+   add Esther Potato p/555555 e/esther@notreal.potato
+   add Betsy Choo p/222222 e/benchoo@nus.edu.sg
+   add Adam Brown p/111111 e/adam@gmail.com
+   add Dickson Ee e/dickson@nus.edu.sg p/444444
+   sortAlpha
 
 ##########################################################
 # test exit command
