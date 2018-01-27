@@ -587,7 +587,7 @@ public class AddressBook {
      */
     private static String executeListAllInAlpha() {
         ArrayList<String[]> toBeDisplayed = getAllPersonsInAddressBook();
-        sortAlpha(toBeDisplayed);
+        sortListAlpha(toBeDisplayed);
         showToUser(toBeDisplayed);
         return getMessageForPersonsDisplayedSummary(toBeDisplayed);
 
@@ -595,7 +595,7 @@ public class AddressBook {
     /**
      * Sort the Array list based on alphabetical order via bubble sort
      */
-    private static void sortAlpha(ArrayList<String[]> list) {
+    private static void sortListAlpha(ArrayList<String[]> list) {
         Collator myCollator = Collator.getInstance();
         myCollator.setStrength(Collator.TERTIARY);
         for(int i=0; i<list.size()-1;i++) {
