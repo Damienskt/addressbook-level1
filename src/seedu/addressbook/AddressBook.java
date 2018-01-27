@@ -134,12 +134,13 @@ public class AddressBook {
     private static final String DIVIDER = "===================================================";
 
 
+    public static final int START_INDEX = 0;
     /* We use a String array to store details of a single person.
      * The constants given below are the indexes for the different data elements of a person
      * used by the internal String[] storage format.
      * For example, a person's name is stored as the 0th element in the array.
      */
-    private static final int PERSON_DATA_INDEX_NAME = 0;
+    private static final int PERSON_DATA_INDEX_NAME = START_INDEX;
     private static final int PERSON_DATA_INDEX_PHONE = 1;
     private static final int PERSON_DATA_INDEX_EMAIL = 2;
 
@@ -265,10 +266,10 @@ public class AddressBook {
         }
 
         if (args.length == 1) {
-            setupGivenFileForStorage(args[0]);
+            setupGivenFileForStorage(args[START_INDEX]);
         }
 
-        if (args.length == 0) {
+        if (args.length == START_INDEX) {
             setupDefaultFileForStorage();
         }
     }
@@ -294,7 +295,7 @@ public class AddressBook {
      */
     private static void exitProgram() {
         showToUser(MESSAGE_GOODBYE, DIVIDER, DIVIDER);
-        System.exit(0);
+        System.exit(START_INDEX);
     }
 
     /**
@@ -341,7 +342,7 @@ public class AddressBook {
      * If a file already exists, it must be a regular file.
      */
     private static boolean hasValidFileName(Path filePath) {
-        return filePath.getFileName().toString().lastIndexOf('.') > 0
+        return filePath.getFileName().toString().lastIndexOf('.') > START_INDEX
                 && (!Files.exists(filePath) || Files.isRegularFile(filePath));
     }
 
@@ -368,7 +369,7 @@ public class AddressBook {
      */
     private static String executeCommand(String userInputString) {
         final String[] commandTypeAndParams = splitCommandWordAndArgs(userInputString);
-        final String commandType = commandTypeAndParams[0];
+        final String commandType = commandTypeAndParams[START_INDEX];
         final String commandArgs = commandTypeAndParams[1];
         switch (commandType) {
             case COMMAND_ADD_WORD:
@@ -399,7 +400,7 @@ public class AddressBook {
      */
     private static String[] splitCommandWordAndArgs(String rawUserInput) {
         final String[] split = rawUserInput.trim().split("\\s+", 2);
-        return split.length == 2 ? split : new String[]{split[0], ""}; // else case: no parameters
+        return split.length == 2 ? split : new String[]{split[START_INDEX], ""}; // else case: no parameters
     }
 
     /**
@@ -587,7 +588,7 @@ public class AddressBook {
      */
     private static String executeListAllInAlpha() {
         ArrayList<String[]> toBeDisplayed = getAllPersonsInAddressBook();
-        sortListAlpha(toBeDisplayed);
+        sortListAlpha(toBeDisplayed, 0);
         showToUser(toBeDisplayed);
         return getMessageForPersonsDisplayedSummary(toBeDisplayed);
 
@@ -595,14 +596,14 @@ public class AddressBook {
     /**
      * Sort the Array list based on alphabetical order via bubble sort
      */
-    private static void sortListAlpha(ArrayList<String[]> list) {
+    private static void sortListAlpha(ArrayList<String[]> list, int comparisonValue) {
         Collator myCollator = Collator.getInstance();
         myCollator.setStrength(Collator.TERTIARY);
-        for(int i=0; i<list.size()-1;i++) {
-            for(int j=0; j<list.size()-i-1; j++) {
+        for(int i=START_INDEX; i<list.size()-1;i++) {
+            for(int j=START_INDEX; j<list.size()-i-1; j++) {
                 String[] person = list.get(j);
                 String[] person2 = list.get(j+1);
-                if(myCollator.compare(person2[0],person[0])<0) {
+                if(myCollator.compare(person2[START_INDEX],person[START_INDEX])< comparisonValue) {
                     list.set(j,person2);
                     list.set(j+1,person);
                 }
@@ -632,7 +633,7 @@ public class AddressBook {
         System.out.print(LINE_PREFIX + "Enter command: ");
         String inputLine = SCANNER.nextLine();
         // silently consume all blank and comment lines
-        while (inputLine.trim().isEmpty() || inputLine.trim().charAt(0) == INPUT_COMMENT_MARKER) {
+        while (inputLine.trim().isEmpty() || inputLine.trim().charAt(START_INDEX) == INPUT_COMMENT_MARKER) {
             inputLine = SCANNER.nextLine();
         }
         return inputLine;
@@ -700,7 +701,7 @@ public class AddressBook {
      */
     private static String getDisplayString(ArrayList<String[]> persons) {
         final StringBuilder messageAccumulator = new StringBuilder();
-        for (int i = 0; i < persons.size(); i++) {
+        for (int i = START_INDEX; i < persons.size(); i++) {
             final String[] person = persons.get(i);
             final int displayIndex = i + DISPLAYED_INDEX_OFFSET;
             messageAccumulator.append('\t')
@@ -1037,7 +1038,7 @@ public class AddressBook {
                 extractEmailFromPersonString(encoded)
         );
         String[] details = new String[3];
-        details[0] = decodedPerson.get(PERSON_PROPERTY_NAME);
+        details[START_INDEX] = decodedPerson.get(PERSON_PROPERTY_NAME);
         details[1] = decodedPerson.get(PERSON_PROPERTY_PHONE);
         details[2] = decodedPerson.get(PERSON_PROPERTY_EMAIL);
         // check that the constructed person is valid
@@ -1073,7 +1074,7 @@ public class AddressBook {
         final String matchAnyPersonDataPrefix = PERSON_DATA_PREFIX_PHONE + '|' + PERSON_DATA_PREFIX_EMAIL;
         final String[] splitArgs = personData.trim().split(matchAnyPersonDataPrefix);
         return splitArgs.length == 3 // 3 arguments
-                && !splitArgs[0].isEmpty() // non-empty arguments
+                && !splitArgs[START_INDEX].isEmpty() // non-empty arguments
                 && !splitArgs[1].isEmpty()
                 && !splitArgs[2].isEmpty();
     }
@@ -1089,7 +1090,7 @@ public class AddressBook {
         final int indexOfEmailPrefix = encoded.indexOf(PERSON_DATA_PREFIX_EMAIL);
         // name is leading substring up to first data prefix symbol
         int indexOfFirstPrefix = Math.min(indexOfEmailPrefix, indexOfPhonePrefix);
-        return encoded.substring(0, indexOfFirstPrefix).trim();
+        return encoded.substring(START_INDEX, indexOfFirstPrefix).trim();
     }
 
     /**
