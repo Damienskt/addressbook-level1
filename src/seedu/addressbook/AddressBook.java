@@ -133,6 +133,7 @@ public class AddressBook {
 
     private static final String DIVIDER = "===================================================";
 
+    private enum PersonProperty {PERSON_PROPERTY_NAME,PERSON_PROPERTY_EMAIL,PERSON_PROPERTY_PHONE};
 
     public static final int START_INDEX = 0;
     /* We use a String array to store details of a single person.
@@ -968,18 +969,18 @@ public class AddressBook {
      * @param email without data prefix
      * @return constructed person
      */
-    private static HashMap<String,String> makePersonFromData(String name, String phone, String email) {
+    private static void makePersonFromData(String name, String phone, String email,HashMap<PersonProperty,String> person) {
        /* final String[] person = new String[PERSON_DATA_COUNT];
         person[PERSON_DATA_INDEX_NAME] = name;
         person[PERSON_DATA_INDEX_PHONE] = phone;
         person[PERSON_DATA_INDEX_EMAIL] = email;
         return person;*/
-        HashMap<String,String> person = new HashMap<>();
-        person.put(PERSON_PROPERTY_NAME, name);
-        person.put(PERSON_PROPERTY_EMAIL, email);
-        person.put(PERSON_PROPERTY_PHONE, phone);
 
-        return person;
+        person.put(PersonProperty.PERSON_PROPERTY_NAME, name);
+        person.put(PersonProperty.PERSON_PROPERTY_EMAIL, email);
+        person.put(PersonProperty.PERSON_PROPERTY_PHONE, phone);
+
+
     }
 
     /**
@@ -1044,11 +1045,12 @@ public class AddressBook {
         if (!isPersonDataExtractableFrom(encoded)) {
             return Optional.empty();
         }
-        HashMap<String,String> decodedPerson = new HashMap<>();
-        decodedPerson = makePersonFromData(
+
+        HashMap<PersonProperty,String> decodedPerson = new HashMap<>();
+        makePersonFromData(
                 extractNameFromPersonString(encoded),
                 extractPhoneFromPersonString(encoded),
-                extractEmailFromPersonString(encoded)
+                extractEmailFromPersonString(encoded),decodedPerson
         );
         String[] details = new String[3];
         details[START_INDEX] = decodedPerson.get(PERSON_PROPERTY_NAME);
@@ -1157,10 +1159,10 @@ public class AddressBook {
      *
      * @param person String array representing the person (used in internal data)
      */
-    private static boolean isPersonDataValid(HashMap<String,String> person) {
-        return isPersonNameValid(person.get(PERSON_PROPERTY_NAME))
-                && isPersonPhoneValid(person.get(PERSON_PROPERTY_PHONE))
-                && isPersonEmailValid(person.get(PERSON_PROPERTY_EMAIL));
+    private static boolean isPersonDataValid(HashMap<PersonProperty,String> person) {
+        return isPersonNameValid(person.get(PersonProperty.PERSON_PROPERTY_NAME))
+                && isPersonPhoneValid(person.get(PersonProperty.PERSON_PROPERTY_PHONE))
+                && isPersonEmailValid(person.get(PersonProperty.PERSON_PROPERTY_EMAIL));
     }
 
     /*
