@@ -92,6 +92,7 @@ public class AddressBook {
     private static final String PERSON_PROPERTY_NAME = "name";
     private static final String PERSON_PROPERTY_EMAIL = "email";
     private static final String PERSON_PROPERTY_PHONE = "phone";
+    private enum PersonProperty  {PERSON_PROPERTY_NAME, PERSON_PROPERTY_EMAIL, PERSON_PROPERTY_PHONE};
 
     private static final String PERSON_STRING_REPRESENTATION = "%1$s " // name
             + PERSON_DATA_PREFIX_PHONE + "%2$s " // phone
@@ -968,16 +969,16 @@ public class AddressBook {
      * @param email without data prefix
      * @return constructed person
      */
-    private static HashMap<String,String> makePersonFromData(String name, String phone, String email) {
+    private static HashMap<PersonProperty,String> makePersonFromData(String name, String phone, String email) {
        /* final String[] person = new String[PERSON_DATA_COUNT];
         person[PERSON_DATA_INDEX_NAME] = name;
         person[PERSON_DATA_INDEX_PHONE] = phone;
         person[PERSON_DATA_INDEX_EMAIL] = email;
         return person;*/
-        HashMap<String,String> person = new HashMap<>();
-        person.put(PERSON_PROPERTY_NAME, name);
-        person.put(PERSON_PROPERTY_EMAIL, email);
-        person.put(PERSON_PROPERTY_PHONE, phone);
+        HashMap<PersonProperty,String> person = new HashMap<>();
+        person.put(PersonProperty.PERSON_PROPERTY_NAME, name);
+        person.put(PersonProperty.PERSON_PROPERTY_EMAIL, email);
+        person.put(PersonProperty.PERSON_PROPERTY_PHONE, phone);
 
         return person;
     }
@@ -1044,16 +1045,16 @@ public class AddressBook {
         if (!isPersonDataExtractableFrom(encoded)) {
             return Optional.empty();
         }
-        HashMap<String,String> decodedPerson = new HashMap<>();
+        HashMap<PersonProperty,String> decodedPerson = new HashMap<>();
         decodedPerson = makePersonFromData(
                 extractNameFromPersonString(encoded),
                 extractPhoneFromPersonString(encoded),
                 extractEmailFromPersonString(encoded)
         );
         String[] details = new String[3];
-        details[START_INDEX] = decodedPerson.get(PERSON_PROPERTY_NAME);
-        details[1] = decodedPerson.get(PERSON_PROPERTY_PHONE);
-        details[2] = decodedPerson.get(PERSON_PROPERTY_EMAIL);
+        details[START_INDEX] = decodedPerson.get(PersonProperty.PERSON_PROPERTY_NAME);
+        details[1] = decodedPerson.get(PersonProperty.PERSON_PROPERTY_PHONE);
+        details[2] = decodedPerson.get(PersonProperty.PERSON_PROPERTY_EMAIL);
         // check that the constructed person is valid
         return isPersonDataValid(decodedPerson) ? Optional.of(details) : Optional.empty();
     }
@@ -1157,10 +1158,10 @@ public class AddressBook {
      *
      * @param person String array representing the person (used in internal data)
      */
-    private static boolean isPersonDataValid(HashMap<String,String> person) {
-        return isPersonNameValid(person.get(PERSON_PROPERTY_NAME))
-                && isPersonPhoneValid(person.get(PERSON_PROPERTY_PHONE))
-                && isPersonEmailValid(person.get(PERSON_PROPERTY_EMAIL));
+    private static boolean isPersonDataValid(HashMap<PersonProperty,String> person) {
+        return isPersonNameValid(person.get(PersonProperty.PERSON_PROPERTY_NAME))
+                && isPersonPhoneValid(person.get(PersonProperty.PERSON_PROPERTY_PHONE))
+                && isPersonEmailValid(person.get(PersonProperty.PERSON_PROPERTY_EMAIL));
     }
 
     /*
