@@ -134,6 +134,7 @@ public class AddressBook {
 
     private static final String DIVIDER = "===================================================";
 
+    private enum PersonProperty {PERSON_PROPERTY_NAME,PERSON_PROPERTY_EMAIL,PERSON_PROPERTY_PHONE};
 
     public static final int START_INDEX = 0;
     /* We use a String array to store details of a single person.
